@@ -1,2 +1,397 @@
-[InternetShortcut]
-URL=file:///C:/Users/manon/Downloads/stablecoins_banques_francaises.html
+<presentation titre="Les Stablecoins et les Banques Françaises" niveau="Master 2 Finance" matiere="Finance Digitale" annee="2026">
+<!--  ============================================================  -->
+<!--  1. DÉFINITION DES STABLECOINS                                 -->
+<!--  ============================================================  -->
+<section id="1" titre="Définition du Stablecoin">
+<definition> Un stablecoin est un cryptoactif dont l'objectif est de maintenir un prix (quasi) fixe, indexé sur un actif de référence — le plus souvent une monnaie fiduciaire (USD, EUR) — tout en conservant les propriétés de la blockchain : programmabilité, transfert 24/7 et coût réduit. </definition>
+<types_stablecoins>
+<type id="1" nom="Fiat-Backed" label="Adossé à la monnaie fiduciaire">
+<description>Chaque jeton est couvert par un actif « sûr » détenu en réserve : cash, dépôts, T-Bills, titres de créances.</description>
+<mecanisme>Dépôt 1 USD → émission 1 token → burn token → remboursement 1 USD</mecanisme>
+<exemples>
+<exemple ticker="USDT" emetteur="Tether" capitalisation_md="184"/>
+<exemple ticker="USDC" emetteur="Circle" capitalisation_md="75"/>
+</exemples>
+</type>
+<type id="2" nom="Crypto-Backed" label="Adossé à des cryptoactifs">
+<description>Couverture par d'autres cryptoactifs (ETH, wBTC), souvent avec sur-collatéralisation.</description>
+<mecanisme>Collatéral crypto bloqué dans smart contracts → liquidation automatique si valeur chute</mecanisme>
+<exemples>
+<exemple ticker="DAI" emetteur="MakerDAO" type="décentralisé"/>
+</exemples>
+</type>
+<type id="3" nom="Commodity-Backed" label="Adossé à des matières premières">
+<description>Indexés sur l'or ou d'autres commodities, avec actifs physiques détenus en réserve.</description>
+<exemples>
+<exemple ticker="DGX" emetteur="Digix Gold" sous_jacent="Or"/>
+</exemples>
+</type>
+<type id="4" nom="Algorithmique" label="Non adossé — algorithmique">
+<description>Stabilité recherchée via algorithmes ajustant l'offre de tokens. Fragile si la confiance s'effondre.</description>
+<avertissement>Plusieurs modèles ont échoué : spirale de la mort (ex. TerraUSD -99% en 2022)</avertissement>
+<exemples>
+<exemple ticker="UST" emetteur="Terra" statut="EFFONDRÉ" date_crash="2022-05"/>
+</exemples>
+</type>
+</types_stablecoins>
+<chiffres_cles>
+<chiffre indicateur="Capitalisation totale stablecoins" valeur="~300" unite="Md$" date="2025"/>
+<chiffre indicateur="Volume transactions annuelles" valeur=">33 000" unite="Md$" date="2025"/>
+<chiffre indicateur="Part adossée au dollar USD" valeur=">90" unite="%" date="2025"/>
+<chiffre indicateur="Croissance depuis 2020" valeur="×10" unite="" note="De 30 Md$ à 300 Md$"/>
+<chiffre indicateur="USDT capitalisation" valeur="184" unite="Md$" date="2025"/>
+<chiffre indicateur="USDC capitalisation" valeur="75" unite="Md$" date="2025"/>
+<chiffre indicateur="Stablecoins en euro" valeur="~500" unite="M$" note="Très minoritaires"/>
+<chiffre indicateur="Prévision 2028" valeur="2 000" unite="Md$" source="Citigroup"/>
+<chiffre indicateur="Prévision 2030" valeur="3 700" unite="Md$" source="Citigroup"/>
+</chiffres_cles>
+</section>
+<!--  ============================================================  -->
+<!--  2. MÉCANISMES DE MAINTIEN DE LA PARITÉ                        -->
+<!--  ============================================================  -->
+<section id="2" titre="Mécanismes de maintien de la parité">
+<flux_fiat_backed label="Fonctionnement d'un stablecoin fiat-backed">
+<etape ordre="1" nom="Dépôt">Le client dépose 100 € chez l'émetteur</etape>
+<etape ordre="2" nom="Réserve">L'émetteur place les fonds en réserves sécurisées (cash, T-Bills)</etape>
+<etape ordre="3" nom="Émission">100 tokens sont créés (mint) sur la blockchain</etape>
+<etape ordre="4" nom="Circulation">Les tokens circulent : paiements, trading, DeFi 24/7</etape>
+<etape ordre="5" nom="Rachat">Le détenteur rend les tokens → ils sont détruits (burn) → 100 € remboursés</etape>
+</flux_fiat_backed>
+<mecanisme_arbitrage>
+<cas condition="prix_marché_superieur_1" action="Émettre tokens à 1$ → vendre plus cher → offre ↑ → prix ↓ vers 1$"/>
+<cas condition="prix_marché_inferieur_1" action="Acheter tokens bon marché → rembourser à 1$ → offre ↓ → prix ↑ vers 1$"/>
+<prerequis>Transparence des réserves, confiance dans l'émetteur, absence de frictions majeures</prerequis>
+</mecanisme_arbitrage>
+<trois_blocs_mecanismes>
+<bloc id="1" nom="Collatéral / Adossement" types="Fiat | Crypto | Matières premières | Algorithmique (sans réserve)"/>
+<bloc id="2" nom="Ajustement de la valeur" types="Arbitrage + droit de rachat | Sur-collatéralisation + liquidations | Algorithme d'offre"/>
+<bloc id="3" nom="Infrastructure technique" types="Smart contracts | Oracles de prix | Gouvernance (DAO ou centralisée)"/>
+</trois_blocs_mecanismes>
+<sur_collateralisation label="Crypto-backed — liquidations automatiques">
+<principe>Valeur collatéral > Valeur stablecoins émis (ex. 150€ collatéral pour 100€ stablecoins)</principe>
+<declencheur>Si valeur collatéral chute sous seuil → vente automatique du collatéral pour rembourser</declencheur>
+</sur_collateralisation>
+<stablecoins_algorithmiques label="Logique de banque centrale algorithmique">
+<si_prix_inferieur_1>Réduction offre par rachat/burn ou verrouillage → prix remonte</si_prix_inferieur_1>
+<si_prix_superieur_1>Émission nouveaux tokens → distribution ou vente → prix baisse</si_prix_superieur_1>
+<risque>Aucun prêteur en dernier ressort — fragile si confiance disparaît</risque>
+</stablecoins_algorithmiques>
+</section>
+<!--  ============================================================  -->
+<!--  3. CONTEXTE FRANCE ET RÉGLEMENTATION MICA                     -->
+<!--  ============================================================  -->
+<section id="3" titre="Contexte France et Réglementation MiCA">
+<mica label="Markets in Crypto-Assets Regulation">
+<description>Première réglementation mondiale complète dédiée aux crypto-actifs. Applicable en Europe depuis 2024.</description>
+<categories_stablecoins>
+<categorie code="ART" nom="Asset-Referenced Token">
+<definition>Adossé à un panier d'actifs non-monétaires</definition>
+<fonds_propres_min>2% des encours (non-significatif) | 3% + buffer (significatif > 10 Md€)</fonds_propres_min>
+<reserves>Diversifiées, interdiction modèles algorithmiques purs</reserves>
+<superviseur>AMF</superviseur>
+</categorie>
+<categorie code="EMT" nom="Electronic Money Token">
+<definition>Adossé 1:1 à une monnaie unique (EUR, USD…)</definition>
+<droit_remboursement>À la valeur nominale, instantané</droit_remboursement>
+<reserves>Actifs liquides sûrs : cash BCE, T-Bills < 3 mois, dépôts overnight</reserves>
+<superviseur>ACPR</superviseur>
+</categorie>
+</categories_stablecoins>
+<obligations_cles>
+<obligation>Réserves 100% en actifs de haute qualité — ségrégation stricte</obligation>
+<obligation>Interdiction de versement d'intérêts aux détenteurs</obligation>
+<obligation>Audits mensuels obligatoires par tiers indépendant</obligation>
+<obligation>Rachat instantané à la valeur nominale garanti</obligation>
+<obligation>Livre blanc (white paper) validé et publié</obligation>
+<obligation>Plan de résolution et de liquidation</obligation>
+<obligation>Contrôles AML/KYC renforcés — reporting TRACFIN</obligation>
+</obligations_cles>
+<calendrier>
+<date echeance="2024-06-30" mesure="Règles ART/EMT applicables — autorisation obligatoire pour émetteurs"/>
+<date echeance="2024-12-30" mesure="Régime CASP (Crypto-Asset Service Providers) pour plateformes et services"/>
+<date echeance="2025-12-31" mesure="Fin enregistrement PSAN AMF — migration vers agrément CASP MiCA"/>
+<date echeance="2026-07-01" mesure="Fin période transitoire — seuls acteurs agréés MiCA opèrent légalement"/>
+</calendrier>
+<sanctions>
+<sanction type="amende_max">5% du chiffre d'affaires global</sanction>
+<sanction type="autre">Retrait d'agrément, injonctions</sanction>
+<sanction type="europeen">Supervision collégiale ESMA/ABE pour stablecoins > 1 Md€</sanction>
+</sanctions>
+</mica>
+<superviseurs_france>
+<superviseur code="AMF" nom="Autorité des Marchés Financiers" perimetre="ART, services crypto-actifs (CASP), plateformes"/>
+<superviseur code="ACPR" nom="Autorité de Contrôle Prudentiel et de Résolution" perimetre="EMT (risque monétaire), émetteurs bancaires"/>
+</superviseurs_france>
+</section>
+<!--  ============================================================  -->
+<!--  4. RÔLE DES STABLECOINS DANS LES BANQUES FRANÇAISES           -->
+<!--  ============================================================  -->
+<section id="4" titre="Rôle des stablecoins dans les banques françaises">
+<usages>
+<usage id="1" categorie="Règlement d'actifs tokenisés">
+<description>Stablecoins utilisés comme monnaie de règlement pour obligations tokenisées, actions tokenisées et fonds on-chain</description>
+<acteurs>SG-FORGE, BNP, CACEIS</acteurs>
+<horizon>Déjà opérationnel (institutionnel)</horizon>
+</usage>
+<usage id="2" categorie="Paiements cross-border">
+<description>Transferts instantanés 24/7 à coûts réduits vs SWIFT pour entreprises et corporate banking</description>
+<avantage>Délai : quelques secondes vs 1-3 jours | Coût réduit | Pas d'intermédiaires multiples</avantage>
+<horizon>En déploiement</horizon>
+</usage>
+<usage id="3" categorie="Collatéral en DeFi">
+<description>Prêts, emprunts, pools de liquidité, produits à rendement pour clients institutionnels</description>
+<horizon>Expérimental / en développement</horizon>
+</usage>
+<usage id="4" categorie="Cash Management">
+<description>Trésorerie tokenisée, money market on-chain, rendement programmable via smart contracts</description>
+<horizon>En développement</horizon>
+</usage>
+<usage id="5" categorie="Conservation (Custody)">
+<description>CACEIS, SG-FORGE, Delubac conservent stablecoins pour fonds et institutionnels sous agrément MiCA</description>
+<horizon>Opérationnel</horizon>
+</usage>
+<usage id="6" categorie="Émission de stablecoins en euros">
+<description>Banques émettrices de stablecoins MiCA-compliant en euros pour finance institutionnelle</description>
+<exemples>EURCV (SG-FORGE), USDCV (SG-FORGE), Qivalis (BNP Paribas)</exemples>
+<horizon>Opérationnel (SG) / 2026 (BNP)</horizon>
+</usage>
+</usages>
+<note_importante>Aujourd'hui les usages sont essentiellement B2B et institutionnels. Le grand public français utilise principalement USDT/USDC via des plateformes crypto tierces.</note_importante>
+</section>
+<!--  ============================================================  -->
+<!--  5. DÉTAIL DES 5 GRANDES BANQUES FRANÇAISES                    -->
+<!--  ============================================================  -->
+<section id="5" titre="Détail des 5 grandes banques françaises">
+<banque id="1" nom="Société Générale" entite_crypto="SG-FORGE" maturite_pct="95" statut="LEADER">
+<agrement_mica type="CASP AMF + EMT" date_conformite="2024-07-01"/>
+<stablecoins_emis>
+<stablecoin ticker="EURCV" devise="EUR" lancement="2023" statut="MiCA conforme"/>
+<stablecoin ticker="USDCV" devise="USD" lancement="2025-06" statut="Lancé"/>
+</stablecoins_emis>
+<reserves>30% cash + 70% actifs liquides < 3 mois — ségrégation ACPR — tests stress validés</reserves>
+<usages_principaux>Règlement d'actifs tokenisés, trésorerie institutionnelle, collatéral on-chain, finance CIB</usages_principaux>
+<avantage_mica>Émission simplifiée en tant qu'établissement de crédit — pas de nouvelle licence EMI requise</avantage_mica>
+<position>Premier stablecoin français MiCA conforme — leader incontesté</position>
+</banque>
+<banque id="2" nom="BNP Paribas" entite_crypto="Qivalis (consortium)" maturite_pct="65" statut="EN_COURS">
+<agrement_mica type="Via DNB (Pays-Bas) — consortium Qivalis" date_prevue="2026-H2"/>
+<stablecoins_emis>
+<stablecoin ticker="EMT_Euro" devise="EUR" lancement="H2 2026" statut="En préparation"/>
+</stablecoins_emis>
+<consortium>
+<membres>BNP Paribas, Santander, Deutsche Bank, Barclays, UBS, Citi + 4 autres</membres>
+<objectif>Stablecoin bancaire commun adossé devises G7 pour paiements internationaux et règlements interbancaires</objectif>
+</consortium>
+<usages_principaux>Paiements B2B, règlements interbancaires, tokenisation d'actifs cross-border</usages_principaux>
+<avantage_mica>Statut bancaire pre-existant → fast-track agrément, pas de capital supplémentaire (MiCA art. 48)</avantage_mica>
+</banque>
+<banque id="3" nom="Crédit Agricole" entite_crypto="CACEIS" maturite_pct="50" statut="CUSTODY">
+<agrement_mica type="CASP MiCA" date_obtention="2025-06" note="1re banque française à obtenir cet agrément"/>
+<stablecoins_emis>
+<stablecoin ticker="Aucun_propre" statut="Pas d'émission directe"/>
+</stablecoins_emis>
+<services>
+<service>Conservation (custody) de stablecoins et crypto-actifs pour institutionnels</service>
+<service>Administration de portefeuilles numériques</service>
+<service>Support infrastructure tokenisation (plateforme Lise)</service>
+</services>
+<reserves>Réserves clients ségrégées — reporting ESMA</reserves>
+<avantage_mica>Pivot asset servicing traditionnel vers tokens sans capital additionnel (MiCA exempte conservation pure)</avantage_mica>
+</banque>
+<banque id="4" nom="BPCE" entite_crypto="Natixis / Hexarq" maturite_pct="35" statut="PRÉPARÉ">
+<agrement_mica type="Fast-track PSAN→CASP via Natixis" statut="En procédure Q1 2026"/>
+<stablecoins_emis>
+<stablecoin ticker="Aucun_public" statut="Pas de stablecoin public confirmé"/>
+</stablecoins_emis>
+<actions>
+<action>Hexarq : offre investissement et conservation crypto-actifs pour particuliers</action>
+<action>Expérimentations tokenisation fonds monétaires MiCA-compliant</action>
+<action>Préparation services custody stablecoins via Natixis Intergestion</action>
+</actions>
+<avantage_potentiel>30 millions de clients retail — fort potentiel de déploiement post-juin 2026</avantage_potentiel>
+</banque>
+<banque id="5" nom="La Banque Postale" entite_crypto="N/A" maturite_pct="10" statut="OBSERVATION">
+<agrement_mica type="Aucun agrément public au Q1 2026"/>
+<stablecoins_emis>
+<stablecoin ticker="Aucun" statut="Non applicable"/>
+</stablecoins_emis>
+<positionnement>
+<priorite>Monnaie numérique de banque centrale (MNBC) plutôt que stablecoins privés</priorite>
+<mandat>Inclusion bancaire — exposition minimale aux risques crypto</mandat>
+<participation>Réflexions interbancaires stablecoins wholesale uniquement</participation>
+</positionnement>
+<avantage>Exposition nulle au risque stablecoin — alignement mandat public et réputation</avantage>
+</banque>
+</section>
+<!--  ============================================================  -->
+<!--  6. POSITIONNEMENT DE LA BCE                                   -->
+<!--  ============================================================  -->
+<section id="6" titre="Positionnement de la BCE">
+<citation source="BCE" date="2026-03"> Une adoption massive des stablecoins, particulièrement non libellés en euro, poserait des risques majeurs pour la souveraineté monétaire et la stabilité financière de la zone euro. </citation>
+<risques_identifies_bce>
+<risque id="1" nom="Dollarisation privée">
+<mecanisme>Adoption massive stablecoins USD → réduction dépôts bancaires zone euro → affaiblissement transmission politique monétaire</mecanisme>
+<chiffre>+1% stablecoins = -0,5% dépôts bancaires retail eurozone</chiffre>
+<scenario_2030>4 000 Md€ stablecoins → contraction crédit 2-3% PIB</scenario_2030>
+<source>Document de travail BCE — mars 2026</source>
+</risque>
+<risque id="2" nom="Bank runs amplifiés">
+<mecanisme>Stablecoins TBTF (USDT 184 Md$) → sorties massives → contagion money markets → liquidité HQLA bancaire</mecanisme>
+</risque>
+<risque id="3" nom="Fragmentation monétaire">
+<mecanisme>Dollarisation via stablecoins vs euro numérique → perte contrôle M0/M1</mecanisme>
+</risque>
+</risques_identifies_bce>
+<reponse_bce>
+<axe id="1" nom="Validation MiCA avec réserves">
+<position>MiCA approuvé comme 1re ligne de défense mais perfectible</position>
+<demandes_complementaires>
+<demande>Transparence renforcée des réserves (audits tiers mensuels)</demande>
+<demande>Coussins de capital plus épais pour émetteurs significatifs</demande>
+<demande>Supervision collégiale ESMA/BCE pour encours > 1 Md€</demande>
+</demandes_complementaires>
+</axe>
+<axe id="2" nom="Euro numérique — contre-offensive souveraine">
+<calendrier>
+<etape evenement="Validation passage étape suivante" date="2025-10"/>
+<etape evenement="Phase pilote wholesale" date="2027"/>
+<etape evenement="Émission retail potentielle si législation UE adoptée" date="2029"/>
+</calendrier>
+<positionnement>Souverain, sans risque, complémentaire des banques — modèle hybride via intermédiation bancaire</positionnement>
+<objectif>Contrer stablecoins privés et préserver la centralité bancaire européenne</objectif>
+</axe>
+<axe id="3" nom="Conséquences pour les banques françaises">
+<orientation>BCE pousse vers EMT en euros (pas USD) avec réserves BCE/overnight</orientation>
+<avantage_banques>MiCA + injonctions BCE favorisent acteurs régulés (SG-FORGE, Qivalis) vs pure-players</avantage_banques>
+</axe>
+</reponse_bce>
+</section>
+<!--  ============================================================  -->
+<!--  7. RISQUES ET AVANTAGES                                       -->
+<!--  ============================================================  -->
+<section id="7" titre="Risques et avantages des stablecoins">
+<risques>
+<risque id="1" categorie="Réserve / Contrepartie" niveau="ÉLEVÉ">
+<description>Si l'émetteur n'a pas 100% de réserves liquides et sûres, un bank run peut entraîner une décote durable (break the peg)</description>
+<impact>Perte de parité, perte de confiance, contagion</impact>
+</risque>
+<risque id="2" categorie="Liquidité" niveau="ÉLEVÉ">
+<description>Rachats massifs simultanés → vente forcée T-Bills → stress sur money markets</description>
+<impact>Spike spreads → LCR breach banques françaises</impact>
+<exemple>USDT break the peg → ventes forcées T-Bills → tensions marché monétaire</exemple>
+</risque>
+<risque id="3" categorie="Désintermédiation bancaire" niveau="MOYEN">
+<description>Migration des dépôts bancaires vers stablecoins → réduction de la capacité de crédit bancaire</description>
+<chiffre_bce>+1% stablecoins = -0,5% dépôts bancaires retail eurozone</chiffre_bce>
+</risque>
+<risque id="4" categorie="Cyber / Opérationnel" niveau="MOYEN">
+<description>Exposition smart contracts, wallets, oracles de prix — un hack = contagion fiduciaire</description>
+<note>BCE 2026 : priorité supervision techno-résilience pour banques crypto-actives</note>
+</risque>
+<risque id="5" categorie="Réglementaire / Sanctions MiCA" niveau="FAIBLE">
+<description>Non-conformité réserves/audits → amendes 5% CA + retrait agrément CASP</description>
+<exemple>Stablecoins non-conformes MiCA sous pression de délistage dans l'UE (USDT sous surveillance)</exemple>
+</risque>
+<risque id="6" categorie="Juridique pour l'utilisateur" niveau="MOYEN">
+<description>Statut légal incertain, droits des porteurs limités, blocage potentiel des fonds, cadre KYC/AML</description>
+</risque>
+<risque id="7" categorie="Bilan bancaire" niveau="MOYEN">
+<description>Réserves stablecoins intégrées au bilan : actifs liquides zéro rendement (MiCA interdit intérêts) + hausse taux BCE = perte mark-to-market</description>
+</risque>
+</risques>
+<avantages>
+<avantage id="1">Règlement instantané 24/7 — pas de délai bancaire</avantage>
+<avantage id="2">Coûts cross-border réduits vs SWIFT — paiements internationaux plus efficaces</avantage>
+<avantage id="3">Programmabilité via smart contracts — finance automatisée</avantage>
+<avantage id="4">Collatéral natif pour actifs tokenisés et DeFi institutionnelle</avantage>
+<avantage id="5">Traçabilité et transparence on-chain</avantage>
+<avantage id="6">Nouveaux revenus bancaires : custody, émission, tokenisation d'actifs</avantage>
+<avantage id="7">Protection contre inflation dans pays à instabilité monétaire (usage macro)</avantage>
+<avantage id="8">Avantage MiCA pour banques : fast-track agrément vs pure-players crypto</avantage>
+</avantages>
+<tableau_risques_par_banque>
+<ligne banque="BNP Paribas" risque_principal="Fuite dépôts B2B (Qivalis)" mesure_mica="Réserves BCE" impact_bilan="-1% dépôts entreprises"/>
+<ligne banque="Société Générale" risque_principal="Liquidité EURCV (>500 M€)" mesure_mica="30% cash ségrégé" impact_bilan="LCR stress -10%"/>
+<ligne banque="Crédit Agricole" risque_principal="Cyber custody (CACEIS)" mesure_mica="Tests techno 2026" impact_bilan="Opérationnel"/>
+<ligne banque="BPCE" risque_principal="Retard CASP" mesure_mica="Fast-track juin 2026" impact_bilan="Opportunité manquée"/>
+<ligne banque="La Banque Postale" risque_principal="Réputation retail" mesure_mica="Observation" impact_bilan="Exposition nulle"/>
+</tableau_risques_par_banque>
+</section>
+<!--  ============================================================  -->
+<!--  8. FRANCE / UE vs ÉTATS-UNIS                                  -->
+<!--  ============================================================  -->
+<section id="8" titre="France / Union Européenne vs États-Unis">
+<comparaison>
+<dimension nom="Cadre réglementaire">
+<ue>MiCA — premier cadre mondial complet : EMT/ART, réserves 100%, audits, fonds propres obligatoires</ue>
+<us>Fragmenté : SEC, CFTC, Fed, US Treasury — pas de loi fédérale unique sur les stablecoins</us>
+</dimension>
+<dimension nom="Approche stratégique">
+<ue>Régulation AVANT l'innovation — protection consommateurs et stabilité financière prioritaires</ue>
+<us>Innovation PRIORITAIRE — supervision progressive et flexible, favorise le secteur privé</us>
+</dimension>
+<dimension nom="Stablecoins dominants">
+<ue>EURCV (SG-FORGE), Qivalis/BNP — marché encore très minoritaire (~500 M$)</ue>
+<us>USDT (184 Md$), USDC (75 Md$) — représentent +90% du marché mondial</us>
+</dimension>
+<dimension nom="Vision stratégique">
+<ue>Souveraineté monétaire européenne — euro numérique comme contre-offre publique</ue>
+<us>Dollarisation numérique = soft power — stablecoins USD renforcent l'hégémonie du dollar mondial</us>
+</dimension>
+<dimension nom="Implication des banques">
+<ue>SG-FORGE leader, BNP via consortium Qivalis, CACEIS custody institutionnel</ue>
+<us>JPMorgan (JPM Coin), blockchains privées interbancaires — grandes banques encore prudentes</us>
+</dimension>
+<dimension nom="Projet de monnaie numérique publique">
+<ue>Euro numérique — phase pilote 2027, retail potentiel 2029</ue>
+<us>Pas de projet de CBDC retail confirmé — Fed privilégie l'innovation privée</us>
+</dimension>
+</comparaison>
+<enjeu_geopolitique> Les stablecoins en dollars permettent d'utiliser le dollar partout sur internet sans banque américaine ni SWIFT, renforçant l'influence financière des États-Unis (dollarisation numérique). L'Europe riposte via MiCA + euro numérique pour préserver sa souveraineté monétaire. </enjeu_geopolitique>
+</section>
+<!--  ============================================================  -->
+<!--  9. ENJEUX DES STABLECOINS POUR LES BANQUES                   -->
+<!--  ============================================================  -->
+<section id="9" titre="Enjeux des stablecoins pour les banques françaises">
+<menaces>
+<menace id="1" nom="Fuite des dépôts (désintermédiation)">
+<mecanisme>Migration dépôts clients vers stablecoins → réduction passifs bancaires → baisse capacité de crédit → affaiblissement transmission monétaire</mecanisme>
+<chiffre>-0,5% dépôts par +1% stablecoins selon BCE 2026</chiffre>
+<impact_fr>BNP/SG perdent dépôts entreprises sur paiements cross-border ; BPCE/LBP exposés côté retail</impact_fr>
+</menace>
+<menace id="2" nom="Concurrence sur les paiements">
+<mecanisme>Stablecoins : transfert instantané, 24/7, moins cher que SWIFT — menace directe sur revenus de paiements bancaires</mecanisme>
+<comparaison>Paiement international classique : 1-3 jours, plusieurs intermédiaires | Stablecoin : quelques secondes, on-chain direct</comparaison>
+</menace>
+<menace id="3" nom="Désintermédiation par fintechs crypto">
+<mecanisme>Tether, Circle et fintechs crypto proposent services financiers sans être banques traditionnelles — concurrence sur cash management et liquidité</mecanisme>
+</menace>
+</menaces>
+<opportunites>
+<opportunite id="1" nom="Tokenisation d'actifs">
+<description>Stablecoins = monnaie de règlement pour obligations, fonds, actions tokenisées sur blockchain</description>
+<chiffre>SG-FORGE : +20% revenus CIB crypto estimés</chiffre>
+</opportunite>
+<opportunite id="2" nom="Nouveaux services bancaires numériques">
+<description>Custody de stablecoins, émission EMT, cash management on-chain, finance programmable pour institutionnels et corporate</description>
+</opportunite>
+<opportunite id="3" nom="Avantage concurrentiel MiCA">
+<description>Statut bancaire pre-existant = fast-track agrément MiCA — barrière à l'entrée vs pure-players crypto non-européens</description>
+</opportunite>
+</opportunites>
+<verdict> Double tranchant : les banques françaises gagnent si l'EMT euro scale et que la tokenisation décolle, perdent si USDT/USDC dominent l'économie numérique européenne. </verdict>
+</section>
+<!--  ============================================================  -->
+<!--  10. CONCLUSION                                                -->
+<!--  ============================================================  -->
+<section id="10" titre="Conclusion">
+<points_cles>
+<point id="1">Un marché de ~300 Md$ en croissance exponentielle (×10 en 5 ans), dominé à +90% par le dollar américain</point>
+<point id="2">MiCA crée un avantage décisif pour les banques françaises (SG-FORGE, BNP, CA) face aux pure-players crypto</point>
+<point id="3">La BCE impose la priorité à l'euro numérique et aux EMT en euros — souveraineté monétaire avant tout</point>
+<point id="4">Double enjeu : opportunité de tokenisation et nouveaux services vs menace sur les dépôts et paiements traditionnels</point>
+<point id="5">France vs USA : régulation vs innovation — deux visions stratégiques qui structurent le paysage mondial des stablecoins</point>
+</points_cles>
+<synthese_une_phrase> Les stablecoins sont le cash numérique de la blockchain — leur adoption massive est inéluctable, et MiCA positionne les banques françaises pour en tirer parti tout en préservant la stabilité financière européenne. </synthese_une_phrase>
+</section>
+</presentation>
